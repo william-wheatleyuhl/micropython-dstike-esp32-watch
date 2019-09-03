@@ -17,7 +17,6 @@ def button():
         mo = MenuOptions()
         bl = ButtonListener()
         beeper = Beeper()
-        moved = False
         row = 0
         y_values = [1,11,21,31,41,51]
 
@@ -28,21 +27,23 @@ def button():
         menu.setMenuList(mo.getMenuOpts(mo.mainMenu))
         currentMenu = menu.menu_options
         # previousMenu = currentMenu
-        menu.initMenuOptions(currentMenu)
+        # menu.initMenuOptions(currentMenu)
+        menu.drawSelect(y_values[row], 1)
+        menu.renderOptions(row, currentMenu)
         menu.refresh()
 
         while True:
                 led_status = led.value()
                 active_butt = bl.checkPinState()
-                if active_butt != 'none' and moved == False:
-                        menu.drawSelect(y_values[row], 1)
-                        menu.renderOptions(row, currentMenu)
-                        menu.refresh()
-                        moved = True
-                        time.sleep(.15)
+                # if active_butt != 'none' and moved == False:
+                #         menu.drawSelect(y_values[row], 1)
+                #         menu.renderOptions(row, currentMenu)
+                #         menu.refresh()
+                #         moved = True
+                #         time.sleep(.15)
 
 
-                if row < len(menu.menu_options)-1 and (active_butt == 'down' and moved == True):
+                if row < len(menu.menu_options)-1 and (active_butt == 'down'):
                         row += 1
                         beeper.playDownTone()
                         menu.drawSelect(y_values[row], 1)
@@ -51,7 +52,7 @@ def button():
                         time.sleep(.15)
                         print(row)
 
-                if row > 0 and (active_butt == 'up' and moved == True):
+                if row > 0 and (active_butt == 'up'):
                         row -= 1
                         beeper.playUpTone()
                         menu.drawSelect(y_values[row], 1)
@@ -66,8 +67,10 @@ def button():
                         else:
                                 menu.setMenuList(mo.getMenuOpts(mo.mainMenu))
                         currentMenu = menu.menu_options
-                        menu.initMenuOptions(currentMenu)
+                        # menu.initMenuOptions(currentMenu)
                         row = 0
+                        menu.drawSelect(y_values[row], 1)
+                        menu.renderOptions(row, currentMenu)
                         beeper.playSelectTone()
                         moved = False
                         menu.refresh()
