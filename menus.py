@@ -1,11 +1,15 @@
 class MenuOptions():
     def __init__(self):
-        # self.buttMenu = dict()
+        self.backOption = {
+            'name' : 'Back...',
+            'action' : 'goBack'
+        }
         self.scanMenu = {
             'name' : 'The Scan Menu'
         }
-        self.scanSub ={
-            'scanMenu' : self.scanMenu
+        self.scanSub = {
+            'scanMenu' : self.scanMenu,
+            'back' : self.backOption
         }
         self.scanOption = {
             'name' : 'Scan',
@@ -16,7 +20,8 @@ class MenuOptions():
             'name' : 'The Connection Menu'
         }
         self.connSub = {
-            'connSub' : self.connectMenu
+            'connSub' : self.connectMenu,
+            'back' : self.backOption
         }
         self.connectOption = {
             'name' : 'Connect',
@@ -32,7 +37,7 @@ class MenuOptions():
         self.subButts = {
             'subButt1' : self.subButt1,
             'subButt2' : self.subButt2,
-            # 'back' : self.backOption
+            'back' : self.backOption
         }
         self.buttMenu = {
             'name': 'buttMenu',
@@ -43,14 +48,15 @@ class MenuOptions():
             'scanOption' : self.scanOption,
             'connectOption' : self.connectOption
         }
-        # self.backOption = {
-        #     'name' : 'Back...',
-        #     'action' : self.mainMenu
-        # }
+
     def getMenuOpts(self, menu):
         menuOpts = list()
         for opt in menu:
-            print(opt)
+            # print(opt)
             menuOpts.append(menu.get(opt))
-            print(menu.get(opt).get('name'))
+            # print(menu.get(opt).get('name'))
         return menuOpts
+
+    # def getBackOpt(self):
+    #     menu = self.mainMenu
+    #     print(menu)

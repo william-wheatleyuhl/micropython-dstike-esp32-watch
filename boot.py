@@ -7,6 +7,7 @@
 
 def button():
         import time
+        from beeps import Beeper
         from machine import Pin
         from button_listener import ButtonListener
         from menu_gui import Menu
@@ -15,6 +16,7 @@ def button():
         menu = Menu()
         mo = MenuOptions()
         bl = ButtonListener()
+        beeper = Beeper()
         moved = False
         row = 0
         y_values = [1,11,21,31,41,51]
@@ -23,9 +25,9 @@ def button():
         led.value(1)
 
         
-        # menu.drawBorder()
-        menu.setMenuList(mo.mainMenu)
+        menu.setMenuList(mo.getMenuOpts(mo.mainMenu))
         currentMenu = menu.menu_options
+        # previousMenu = currentMenu
         menu.initMenuOptions(currentMenu)
         menu.refresh()
 
@@ -37,27 +39,36 @@ def button():
                         menu.renderOptions(row, currentMenu)
                         menu.refresh()
                         moved = True
+                        time.sleep(.15)
+
 
                 if row < len(menu.menu_options)-1 and (active_butt == 'down' and moved == True):
                         row += 1
+                        beeper.playDownTone()
                         menu.drawSelect(y_values[row], 1)
                         menu.renderOptions(row, currentMenu)
                         menu.refresh()
+                        time.sleep(.15)
                         print(row)
 
                 if row > 0 and (active_butt == 'up' and moved == True):
                         row -= 1
+                        beeper.playUpTone()
                         menu.drawSelect(y_values[row], 1)
                         menu.renderOptions(row, currentMenu)
                         menu.refresh()
+                        time.sleep(.15)
                         print(row)
 
                 if active_butt == 'center':
-                        print(menu.menu_options[row].get('action'))
-                        menu.setMenuList(menu.menu_options[row].get('action'))
+                        if menu.menu_options[row].get('action') != 'goBack':
+                                menu.setMenuList(mo.getMenuOpts(menu.menu_options[row].get('action')))
+                        else:
+                                menu.setMenuList(mo.getMenuOpts(mo.mainMenu))
                         currentMenu = menu.menu_options
                         menu.initMenuOptions(currentMenu)
                         row = 0
+                        beeper.playSelectTone()
                         moved = False
                         menu.refresh()
                         time.sleep(.5)
@@ -69,5 +80,4 @@ def button():
                         led.value(1)
                         time.sleep(.25)
                         
-                time.sleep(.1)
 
