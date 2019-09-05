@@ -7,7 +7,7 @@
 
 def button():
         import time
-        from beeps import Beeper
+        # from beeps import Beeper
         from machine import Pin
         from button_listener import ButtonListener
         from menu_gui import Menu
@@ -16,7 +16,7 @@ def button():
         menu = Menu()
         eh = EventHandler()
         bl = ButtonListener()
-        beeper = Beeper()
+        # beeper = Beeper()
 
         row = 0
         y_values = [1,11,21,31,41,51]
@@ -36,35 +36,47 @@ def button():
 
                 if row < len(menu.menu_options)-1 and (active_butt == 'down'):
                         row += 1
-                        beeper.playDownTone()
+                        eh.parseEvent(active_butt)
+                        # beeper.playDownTone()
                         menu.drawSelect(y_values[row], 1)
                         menu.renderOptions(row, currentMenu)
                         menu.refresh()
                         time.sleep(.15)
-                        print(row)
+                        # print(row)
 
                 if row > 0 and (active_butt == 'up'):
                         row -= 1
-                        beeper.playUpTone()
+                        eh.parseEvent(active_butt)
+                        # beeper.playUpTone()
                         menu.drawSelect(y_values[row], 1)
                         menu.renderOptions(row, currentMenu)
                         menu.refresh()
                         time.sleep(.15)
-                        print(row)
+                        # print(row)
 
                 if active_butt == 'center':
+                        eh.parseEvent(active_butt)
                         if isinstance(menu.menu_options[row].get('action'), dict):
-                                print("I am a dict")
+                                # print("I am a dict")
+                                # print(eh.parseEvent(menu.menu_options[row].get('action')))
+                                menu.setMenuList(eh.parseEvent(menu.menu_options[row].get('action')))
+                                currentMenu = menu.menu_options
+                                row = 0
+                                menu.drawSelect(y_values[row], 1)
+                                menu.renderOptions(row, currentMenu)
+                                # beeper.playSelectTone()
+                                menu.refresh()
+                                time.sleep(.5)
                         else:
-                                print("Nope, not a dict")
-                        menu.setMenuList(eh.getEvent(menu.menu_options[row].get('action')))
-                        currentMenu = menu.menu_options
-                        row = 0
-                        menu.drawSelect(y_values[row], 1)
-                        menu.renderOptions(row, currentMenu)
-                        beeper.playSelectTone()
-                        menu.refresh()
-                        time.sleep(.5)
+                                # print("Nope, not a dict")
+                                menu.setMenuList(eh.getEvent(menu.menu_options[row].get('action')))
+                                currentMenu = menu.menu_options
+                                row = 0
+                                menu.drawSelect(y_values[row], 1)
+                                menu.renderOptions(row, currentMenu)
+                                # beeper.playSelectTone()
+                                menu.refresh()
+                                time.sleep(.5)
 
                 if active_butt == 'side_b' and led_status == 1:
                         led.value(0)

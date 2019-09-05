@@ -52,8 +52,8 @@ class MenuOptions():
             'action' : self.subButts
         }
         self.soundMenu = {
-            'soundOn' : {'name' : '[ ] Sound On', 'order' : 1} ,
-            'soundOff' : {'name' : '[ ] Sound Off', 'order' : 2},
+            'soundOn' : {'name' : '[ ] Sound On', 'order' : 1, 'action' : 'soundOn'} ,
+            'soundOff' : {'name' : '[ ] Sound Off', 'order' : 2, 'action' : 'soundOff'},
             'back' : self.backOption 
         }
         self.soundOption = {
