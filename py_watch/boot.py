@@ -11,23 +11,21 @@ def button():
         from machine import Pin
         from button_listener import ButtonListener
         from menu_gui import Menu
-        from menus import MenuOptions
+        from event_handler import EventHandler
 
         menu = Menu()
-        mo = MenuOptions()
+        eh = EventHandler()
         bl = ButtonListener()
         beeper = Beeper()
+
         row = 0
         y_values = [1,11,21,31,41,51]
 
         led = Pin(27, Pin.OUT, Pin.PULL_DOWN)
         led.value(1)
 
-        
-        menu.setMenuList(mo.getMenuOpts(mo.mainMenu))
+        menu.setMenuList(eh.getMainMenuList())
         currentMenu = menu.menu_options
-        # previousMenu = currentMenu
-        # menu.initMenuOptions(currentMenu)
         menu.drawSelect(y_values[row], 1)
         menu.renderOptions(row, currentMenu)
         menu.refresh()
@@ -35,13 +33,6 @@ def button():
         while True:
                 led_status = led.value()
                 active_butt = bl.checkPinState()
-                # if active_butt != 'none' and moved == False:
-                #         menu.drawSelect(y_values[row], 1)
-                #         menu.renderOptions(row, currentMenu)
-                #         menu.refresh()
-                #         moved = True
-                #         time.sleep(.15)
-
 
                 if row < len(menu.menu_options)-1 and (active_butt == 'down'):
                         row += 1
@@ -62,17 +53,16 @@ def button():
                         print(row)
 
                 if active_butt == 'center':
-                        if menu.menu_options[row].get('action') != 'goBack':
-                                menu.setMenuList(mo.getMenuOpts(menu.menu_options[row].get('action')))
+                        if isinstance(menu.menu_options[row].get('action'), dict):
+                                print("I am a dict")
                         else:
-                                menu.setMenuList(mo.getMenuOpts(mo.mainMenu))
+                                print("Nope, not a dict")
+                        menu.setMenuList(eh.getEvent(menu.menu_options[row].get('action')))
                         currentMenu = menu.menu_options
-                        # menu.initMenuOptions(currentMenu)
                         row = 0
                         menu.drawSelect(y_values[row], 1)
                         menu.renderOptions(row, currentMenu)
                         beeper.playSelectTone()
-                        moved = False
                         menu.refresh()
                         time.sleep(.5)
 
