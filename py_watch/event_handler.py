@@ -16,13 +16,14 @@ class EventHandler():
         return self.mo.getMenuOpts(self.mo.mainMenu)
 
     def parseEvent(self, event):
-        # print("Parsing {}".format(event))
+        print("Parsing {}".format(event))
         if isinstance(event, dict):
             return self.getMenu(event)
         else:
             return self.getEvent(event)
 
     def getEvent(self, event):
+        print("Get Event {}".format(event))
         if event == 'goBack':
             menuList = self.mo.getMenuOpts(self.mo.mainMenu)
             return menuList
@@ -42,13 +43,16 @@ class EventHandler():
             self.mo.soundMenu.get('soundOff')['name'] = '[X] Sound Off'
             menuList = self.mo.getMenuOpts(self.mo.soundMenu)
             return menuList
-        if event == 'soundOn' and self.beeper.soundOn == False:
+        elif event == 'soundOn' and self.beeper.soundOn == False:
             self.beeper.reinit(0, 0)
             self.beeper.soundOn = True
-            # on = '[X] Sound On'
             self.mo.soundMenu.get('soundOn')['name'] = '[X] Sound On'
             self.mo.soundMenu.get('soundOff')['name'] = '[ ] Sound Off'
             self.beeper.playSelectTone()
+            menuList = self.mo.getMenuOpts(self.mo.soundMenu)
+            return menuList
+        else:
+            print(self.beeper.soundOn)
             menuList = self.mo.getMenuOpts(self.mo.soundMenu)
             return menuList
 

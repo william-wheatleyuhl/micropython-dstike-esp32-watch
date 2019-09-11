@@ -39,3 +39,8 @@ class Menu():
                 self.renderText(option.get('name'), self.y_values[options.index(option)]+2, 0)
             else:
                 self.renderText(option.get('name'), self.y_values[options.index(option)]+2, 1)
+
+    def moveSelection(self, row, currentMenu):
+        self.drawSelect(self.y_values[row], 1)
+        self.renderOptions(row, currentMenu)
+        self.refresh()
